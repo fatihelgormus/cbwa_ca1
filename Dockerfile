@@ -1,4 +1,4 @@
-FROM alpine:3.13.2 AS builder
+FROM alpine:latest AS builder
 
 # Install all dependencies required for compiling busybox
 RUN apk add gcc musl-dev make perl
@@ -22,7 +22,7 @@ RUN adduser -D static
 # Switch to the scratch image
 FROM scratch
 
-EXPOSE 3000
+EXPOSE 8080
 
 # Copy over the user
 COPY --from=builder /etc/passwd /etc/passwd
@@ -43,7 +43,7 @@ COPY httpd.conf .
 # Copy the static website
 # Use the .dockerignore file to control what ends up inside the image!
 # NOTE: Commented out since this will also copy the .config file
-# COPY . .
+ COPY WebDevCA2 .
 
 # Run busybox httpd
-CMD ["/busybox", "httpd", "-f", "-v", "-p", "3000", "-c", "httpd.conf"]
+CMD ["/busybox", "httpd", "-f", "-v", "-p", "8080", "-c", "httpd.conf", "./index.html"]
