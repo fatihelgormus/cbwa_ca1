@@ -13,6 +13,10 @@ WORKDIR /busybox
 # Copy the busybox build config (limited to httpd)
 COPY .config .
 
+#Downloading and unzipping
+RUN wget https://github.com/fatihelgormus/WebDevCA2/archive/main.zip
+RUN unzip main.zip
+
 # Compile and install busybox
 RUN make && make install
 
